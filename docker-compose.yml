@@ -1,0 +1,49 @@
+version: "3"
+services:
+  frontend:
+    build: frontend
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./frontend/:/app/
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+
+  backend:
+    build: backend
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./backend/:/app/
+      - ./.env:/app/.env:ro
+    depends_on:
+      - database-1
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+
+  database-1:
+    image: mysql:5.7.28
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./database:/var/lib/mysql
+      - ./scripts:/docker-entrypoint-initdb.d/
+    environment:
+      - MYSQL_ROOT_PASSWORD=${DBPASS}
+      - MYSQL_DATABASE=datagrate
+
+  database-2:
+    image: mysql:5.7.28
+    ports:
+      - "3307:3306"
+    volumes:
+      - ./database2:/var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=${DBPASS}
+      - MYSQL_DATABASE=datagrate
+
+  adminer:
+    image: adminer
+    ports: 
+      - "8081:8080"
+

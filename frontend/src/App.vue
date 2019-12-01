@@ -17,6 +17,17 @@
       </div>
 
       <v-spacer></v-spacer>
+      <v-btn
+        to="/"
+        class="mr-4"
+      >
+        Home
+      </v-btn>
+      <v-btn
+        to="/dbreader"
+      >
+        Database
+      </v-btn>
     </v-app-bar>
 
     <v-content>

@@ -1,9 +1,16 @@
 <template>
   <v-app>
+    <v-img
+      src="../public/img/background_angle.png"
+      max-width="100%"
+      transition="scale-transition"
+      position="center center"
+    >
+    </v-img>
     <v-app-bar
       app
-      color="primary"
-      dark
+      hide-on-scroll
+      flat
     >
       <div class="d-flex align-center">
         <v-img

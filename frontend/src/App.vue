@@ -1,12 +1,5 @@
 <template>
   <v-app>
-    <v-img
-      src="../public/img/background_angle.png"
-      max-width="100%"
-      transition="scale-transition"
-      position="center center"
-    >
-    </v-img>
     <v-app-bar
       app
       hide-on-scroll
@@ -22,16 +15,17 @@
           width="100"
         />
       </div>
-
       <v-spacer></v-spacer>
       <v-btn
         to="/"
         class="mr-4"
+        color="secondary_button"
       >
         Home
       </v-btn>
       <v-btn
         to="/dbreader"
+        color="secondary_button"
       >
         Database
       </v-btn>
@@ -52,6 +46,12 @@
     </v-content>
   </v-app>
 </template>
+
+<style lang="postcss">
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+</style>
 
 <script>
 import { mapState } from 'vuex'

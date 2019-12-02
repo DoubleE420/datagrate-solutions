@@ -44,6 +44,11 @@
       </v-overlay>
       <router-view></router-view>
     </v-content>
+    <footer
+      class="tw-bg-blue-700"
+    >
+      <p class="">DataGrate Solutions© 2019</p>
+    </footer>
   </v-app>
 </template>
 

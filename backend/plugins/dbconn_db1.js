@@ -14,7 +14,7 @@ connection.connect(function(err) {
     return;
   }
  
-  console.log('connected as id ' + connection.threadId);
+  console.log('connected as id ' + connection.threadId + ' to database-1');
 });
 
 module.exports = connection;

@@ -7,11 +7,12 @@
     <div class="d-flex align-center">
       <v-img
         alt="DataGrate Logo"
-        class="shrink mr-2"
+        class="shrink mr-2 tw-cursor-pointer"
         contain
         src="../../public/img/logo_trans.png"
         transition="scale-transition"
         width="100"
+        @click="goHome()"
       />
     </div>
     <v-spacer></v-spacer>
@@ -33,6 +34,11 @@
 
 <script>
 export default {
-  name: 'Nav'
+  name: 'Nav',
+  methods: {
+    goHome () {
+      this.$router.push('/')
+    }
+  }
 }
 </script>

@@ -24,6 +24,11 @@
       >
         name data
       </v-btn>
+        <v-btn
+        @click="getmaleData()"
+      >
+        Only Males
+      </v-btn>
       <div v-for="dataItem in data" v-bind:key="dataItem.id" class="mt-4">
         <v-card>
           <v-card-title>
@@ -71,6 +76,10 @@ export default {
     },
     getnameData () {
       this.$store.dispatch('getnameData')
+      console.log(this.data)
+    },
+    getmaleData () {
+      this.$store.dispatch('getmaleData')
       console.log(this.data)
     }
   },

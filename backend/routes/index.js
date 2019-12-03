@@ -55,4 +55,17 @@ router.get('/name_columns', function(req, res, next) {
     res.json(results)
   })
 })
+
+router.get('/male_columns', function(req, res, next) {
+  console.log('getting data')
+  db.query(`SELECT * 
+              FROM user_details
+              WHERE gender = 'male'  
+              `, function (error, results, fields) {
+    if (error) throw error
+    // connected!
+    console.log('got data')
+    res.json(results)
+  })
+})
 module.exports = router;

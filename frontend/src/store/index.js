@@ -47,6 +47,13 @@ export default new Vuex.Store({
         context.commit('GET_DATA', response.data)
         context.commit('SET_LOADING_STATUS', false)
       })
+    },
+    getmaleData (context) {
+      context.commit('SET_LOADING_STATUS', true)
+      axios.get('/api/male_columns').then(response => {
+        context.commit('GET_DATA', response.data)
+        context.commit('SET_LOADING_STATUS', false)
+      })
     }
   },
   modules: {

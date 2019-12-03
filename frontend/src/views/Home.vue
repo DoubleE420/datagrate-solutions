@@ -11,8 +11,8 @@
         justify="space-around"
       >
         <v-card
-          class="pa-4 custom-mt"
-          width="400"
+          class="px-12 py-4 custom-mt"
+          width="500"
         >
           <h1 class="tw-text-4xl">
             Easy analyst tools built by IT professionals.
@@ -46,9 +46,10 @@
       class="tw--mt-64"
     >
       <v-sheet
-        class="mx-auto py-4"
-        color="red"
+        class="mx-auto pa-4"
+        color="secondary_button"
         elevation="24"
+        max-width="1200"
       >
         <v-row
           justify="space-around"
@@ -122,7 +123,7 @@
           justify="space-around"
         >
           <v-btn
-            class="ma-4"
+            class="mt-4"
             color="primary_button"
           >
             View Use Cases
@@ -136,74 +137,8 @@
 <style scoped lang="scss">
 .custom-mt {
   margin-top: 15%;
-  margin-right: 5%;
+  margin-right: 20%;
 }
-
-ul {
-  list-style-type: none;
-  margin: 0;
-  padding-right: 100px;
-  padding-left: 100px;
-  padding-top:50px;
-  font-size: 12px;
-  overflow: hidden;
-  background-color: none;
-}
-
-li {
-  float: right;
-}
-
-li a {
-  display: block;
-  color: white;
-  text-align: center;
-  padding: 14px 16px;
-  text-decoration: none;
-}
-
-li a:hover {
-  background-color: #052C95;
-}
-
-.button1 {
-  background-color: #4DA6FF;
-  border: none;
-  color: white;
-  padding: 15px 32px;
-  text-align: center;
-  text-decoration: none;
-  display: inline-block;
-  font-size: 16px;
-  border-radius: 10px;
-}
-
-.button2 {
-  background-color: #E0EBFF;
-  border: none;
-  color: #365FD0;
-  padding: 15px 32px;
-  text-align: center;
-  text-decoration: none;
-  display: inline-block;
-  font-size: 16px;
-  border-radius: 10px;
-}
-
-footer{
-  position: absolute;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    background: #113EB5;
-  color: white;
-  text-align: center;
-  font-size:8px;
-  padding-top: 10px;
-  padding-bottom:10px;
-
-}
-
 </style>
 
 <script>

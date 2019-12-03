@@ -25,9 +25,16 @@
     </v-btn>
     <v-btn
       to="/dbreader"
+      class="mr-4"
       color="secondary_button"
     >
       Database
+    </v-btn>
+    <v-btn
+      to="/about"
+      color="secondary_button"
+    >
+      About Us
     </v-btn>
   </v-app-bar>
 </template>

@@ -1,5 +1,12 @@
 # DataGrate Solutions
 
+## Tools You Need Before Getting Started
+1. Docker
+2. Node.js
+3. Make sure above are installed and running on desktop
+4. Full Repo on local machine
+5. Follow instructions below
+
 ## Getting Started
 1. Open a command prompt/terminal window
 2. Open the project directory

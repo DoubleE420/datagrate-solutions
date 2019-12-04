@@ -4,7 +4,7 @@
 1. Docker
 2. Node.js
 3. Make sure above are installed and running on desktop
-4. Full Repo on local machine
+4. Full Repo on local machine and a dev env installed
 5. Follow instructions below
 
 ## Getting Started

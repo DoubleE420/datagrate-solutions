@@ -31,6 +31,13 @@
       Database
     </v-btn>
     <v-btn
+      to="/migrate"
+      class="mr-4"
+      color="secondary_button"
+    >
+      Migrate
+    </v-btn>
+    <v-btn
       to="/about"
       color="secondary_button"
     >

@@ -115,7 +115,7 @@
               Management
             </v-card-title>
             <v-card-text>
-              The in-built suite of analytics tools slows for pulling and organizing data for all of your business needs.
+              The in-built suite of analytics tools allows for pulling and organizing data for all of your business needs.
             </v-card-text>
           </v-card>
         </v-row>

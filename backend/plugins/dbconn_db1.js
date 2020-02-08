@@ -7,7 +7,7 @@ var connection = mysql.createConnection({
   password: process.env.DBPASS,
   database: 'datagrate'
 });
- 
+
 connection.connect(function(err) {
   if (err) {
     console.error('error connecting: ' + err.stack);

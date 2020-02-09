@@ -24,6 +24,28 @@ router.get('/init', function(req, res, next) {
   })
 })
 
+router.post('/readcolumns', function(req, res, next) {
+  data = {
+    name: '*',
+    table: 'user_details'
+  }
+  console.log(data)
+  console.log('reading columns')
+  db.query('SELECT ' + data.name + `FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = N'` + data.table + `'`, function (error, results, fields) {
+    if (error) throw error
+    console.log('got columns')
+    res.json(results)
+  })
+})
+
+router.post('/readtables', function(req, res, next) {
+  db.query('SHOW TABLES', function (error, results, fields) {
+    if (error) throw error
+    console.log('got tables')
+    res.json(results)
+  })
+})
+
 router.get('/all_data', function(req, res, next) {
   console.log('getting data')
   console.log(req.body)

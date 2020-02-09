@@ -11,8 +11,42 @@ export default new Vuex.Store({
     loadingStatus: false,
     sourceLoginStatus: true,
     destLoginStatus: false,
+    currentDB: 'datagrate',
     sourceDBs: '',
-    data: ''
+    data: '',
+    firstStatementTypes: [
+      {
+        name: 'SELECT',
+        id: 1
+      },
+      {
+        name: 'UPDATE',
+        id: 2
+      },
+      {
+        name: 'DELETE',
+        id: 3
+      },
+      {
+        name: 'INSERT INTO',
+        id: 4
+      },
+      {
+        name: 'CREATE DATABASE',
+        id: 5
+      },
+      {
+        name: 'ALTER DATABASE',
+        id: 6
+      }
+    ],
+    secondStatementColumns: [
+      {
+        name: '*',
+        id: 1
+      }
+    ],
+    fourthStatementTables: []
   },
   mutations: {
     SET_LOADING_STATUS (state, status) {
@@ -29,6 +63,12 @@ export default new Vuex.Store({
     },
     GET_DATA (state, data) {
       state.data = data
+    },
+    GET_COLUMNS (state, data) {
+      state.secondStatementColumns = data
+    },
+    GET_TABLES (state, data) {
+      state.fourthStatementTables = data
     }
   },
   actions: {
@@ -39,6 +79,21 @@ export default new Vuex.Store({
         context.commit('GET_SOURCE_DB', response.data)
         console.log('got data for init')
         console.log(response.data)
+        context.commit('SET_LOADING_STATUS', false)
+      })
+    },
+    readColumns (context) {
+      context.commit('SET_LOADING_STATUS', true)
+      axios.post('/api/source/readcolumns').then(response => {
+        context.commit('GET_COLUMNS', response.data)
+        context.commit('SET_LOADING_STATUS', false)
+      })
+    },
+    readTables (context) {
+      context.commit('SET_LOADING_STATUS', true)
+      axios.post('/api/source/readtables').then(response => {
+        console.log(response.data)
+        context.commit('GET_TABLES', response.data)
         context.commit('SET_LOADING_STATUS', false)
       })
     },

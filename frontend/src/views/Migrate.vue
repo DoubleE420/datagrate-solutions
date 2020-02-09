@@ -150,7 +150,7 @@ export default {
     passwordDest: ''
   }),
   mounted () {
-    //
+    this.initReadDB()
   },
   methods: {
     updateDBName (name) {

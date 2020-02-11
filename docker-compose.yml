@@ -32,17 +32,21 @@ services:
       - MYSQL_DATABASE=datagrate
 
   database-2:
-    image: mysql:5.7.28
+    image: postgres:9.6.16
     ports:
       - "3307:3306"
     volumes:
-      - ./database2/:/var/lib/mysql
+      - pgdata:/var/lib/postgresql/data/
     environment:
-      - MYSQL_ROOT_PASSWORD=${DBPASS}
-      - MYSQL_DATABASE=datagrate
+      # - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=${DBPASS}
+      - PGDATA=/var/lib/postgresql/data/pgdata
 
   adminer:
     image: adminer
     ports: 
       - "8081:8080"
 
+volumes: 
+  pgdata:
+    driver: local

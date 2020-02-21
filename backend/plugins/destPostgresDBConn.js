@@ -5,7 +5,8 @@ const pool = new Pool({
   host: process.env.DESTDBHOST,
   user: process.env.DESTDBUSER,
   password: process.env.DESTDBPASS,
-  port: process.env.DESTDBPORT
+  port: process.env.DESTDBPORT,
+  database: process.env.DESTDBDATABASE
 })
  
 pool.connect(function(err) {
@@ -18,3 +19,4 @@ pool.connect(function(err) {
 });
 
 module.exports = pool;
+

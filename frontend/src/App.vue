@@ -30,7 +30,7 @@
 
 <script>
 import Nav from '@/components/Nav.vue'
-import { mapState } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 export default {
   name: 'App',
   components: {
@@ -46,6 +46,14 @@ export default {
     ...mapState([
       'loadingStatus'
     ])
+  },
+  methods: {
+    ...mapActions([
+      'initReadDB'
+    ])
+  },
+  mounted () {
+    this.initReadDB()
   }
 }
 </script>

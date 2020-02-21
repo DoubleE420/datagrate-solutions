@@ -1,72 +1,46 @@
 var express = require('express');
 var router = express.Router();
-// var db = require('../plugins/dbconn_db1.js');
-// var db2 = require('../plugins/dbconn_db2.js');
+var postgresDB = require('../plugins/destPostgresDBConn');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
   res.send('destination router works')
 });
 
-router.get('/all_data', function(req, res, next) {
-  console.log('getting data')
-  db.query('SELECT * FROM user_details', function (error, results, fields) {
+router.get('/readtables', function(req, res, next) {
+  console.log('getting DESTINATION database TABLES')
+  var tables = []
+  postgresDB.query(`SELECT * FROM information_schema.tables WHERE table_schema = 'public'`, function (error, results, fields) {
     if (error) throw error
-    // connected!
-    console.log('got data')
-    res.json(results)
+    for (var i = 0; i < results.rows.length; ++i) {
+      tables.push(results.rows[i].table_name)
+    }
+    res.json(tables)
   })
 })
 
-router.get('/user_id_column', function(req, res, next) {
-  console.log('getting data')
-  db.query(`SELECT user_id 
-              FROM user_details 
-              `, function (error, results, fields) {
+router.get('/readcolumns', function(req, res, next) {
+  var tables = []
+  var obj = {
+    name: '',
+    columns: [
+    ]
+  }
+  postgresDB.query(`SELECT * FROM information_schema.tables WHERE table_schema = 'public'`, function (error, results, fields) {
     if (error) throw error
-    // connected!
-    console.log('got data')
-    res.json(results)
+    for (var i = 0; i < results.rows.length; ++i) {
+      var name = results.rows[i].table_name
+      postgresDB.query(`SELECT column_name FROM information_schema.columns WHERE TABLE_NAME = '${name}'`, function (error2, columnResults, fields2) {
+        // console.log(columnResults.rows)
+        tables.push(name)
+        obj.name = name
+        obj.columns.push(name)
+      })
+      console.log('getting DESTINATION database COLUMNS for table ' + name)
+    }
+    console.log(obj)
+    res.json(obj)
   })
 })
 
-router.get('/gender_column', function(req, res, next) {
-  console.log('getting data')
-  db.query(`SELECT gender 
-              FROM user_details 
-              `, function (error, results, fields) {
-    if (error) throw error
-    // connected!
-    console.log('got data')
-    res.json(results)
-  })
-})
-
-router.get('/name_columns', function(req, res, next) {
-  console.log('getting data')
-  var sql = `SELECT 
-  first_name, 
-  last_name 
-    FROM user_details 
-    `
-  db.query(sql, function (error, results, fields) {
-    if (error) throw error
-    // connected!
-    console.log('got data')
-    res.json(results)
-  })
-})
-
-router.get('/male_columns', function(req, res, next) {
-  console.log('getting data')
-  db.query(`SELECT * 
-              FROM user_details
-              WHERE gender = 'male'  
-              `, function (error, results, fields) {
-    if (error) throw error
-    // connected!
-    console.log('got data')
-    res.json(results)
-  })
-})
 module.exports = router;

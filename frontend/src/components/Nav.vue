@@ -28,7 +28,7 @@
       class="mr-4"
       color="secondary_button"
     >
-      Database
+      View Database
     </v-btn>
     <v-btn
       to="/migrate"

@@ -5,7 +5,9 @@ var connection = mysql.createConnection({
   host: process.env.SRCDBHOST,
   user: process.env.SRCDBUSER,
   password: process.env.SRCDBPASS,
-  database: 'datagrate'
+  port: process.env.SRCDBPORT,
+  database: process.env.SRCDBDATABASE,
+  multipleStatements: true
 });
 
 connection.connect(function(err) {

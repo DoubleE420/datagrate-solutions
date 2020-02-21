@@ -9,11 +9,15 @@ Vue.use(VueAxios, axios)
 export default new Vuex.Store({
   state: {
     loadingStatus: false,
-    sourceLoginStatus: true,
-    destLoginStatus: false,
+    migrateTypes: [
+      'MySQL',
+      'PostgreSQL'
+    ],
     currentDB: 'datagrate',
+    currentTable: '',
     sourceDBs: '',
     data: '',
+    migrateColumns: [],
     firstStatementTypes: [
       {
         name: 'SELECT',
@@ -40,121 +44,114 @@ export default new Vuex.Store({
         id: 6
       }
     ],
-    secondStatementColumns: [
-      {
-        name: '*',
-        id: 1
-      }
-    ],
-    fourthStatementTables: []
+    srcTableColumns: 'lol',
+    srcDBTables: [],
+    destDBTables: [],
+    destDBColumns: []
   },
   mutations: {
     SET_LOADING_STATUS (state, status) {
-      state.loadingStatus = false
-    },
-    SET_LOGIN_SRC_STATUS (state, data) {
-      state.sourceLoginStatus = data
-    },
-    SET_LOGIN_DEST_STATUS (state, data) {
-      state.sourceLoginStatus = data
+      state.loadingStatus = status
     },
     GET_SOURCE_DB (state, data) {
       state.sourceDBs = data
     },
     GET_DATA (state, data) {
       state.data = data
+      console.log(data)
     },
     GET_COLUMNS (state, data) {
-      state.secondStatementColumns = data
+      state.srcTableColumns = data
+    },
+    SET_MIGRATE_COLUMNS (state, data) {
+      console.log(data.motherObj)
+      state.migrateColumns.push(data)
     },
     GET_TABLES (state, data) {
-      state.fourthStatementTables = data
+      state.srcDBTables = data
+    },
+    SET_DEST_TABLES (state, data) {
+      state.destDBTables = data
+    },
+    SET_DEST_COLUMNS (state, data) {
+      state.destDBColumns = data
     }
   },
   actions: {
     initReadDB (context) {
-      console.log('getting data for init')
       context.commit('SET_LOADING_STATUS', true)
       axios.get('/api/source/init').then(response => {
-        context.commit('GET_SOURCE_DB', response.data)
+        var tables = response.data
+        context.commit('GET_SOURCE_DB', tables)
         console.log('got data for init')
-        console.log(response.data)
+        // will show the current available databases
+        console.log(tables)
         context.commit('SET_LOADING_STATUS', false)
       })
     },
-    readColumns (context) {
-      context.commit('SET_LOADING_STATUS', true)
-      axios.post('/api/source/readcolumns').then(response => {
-        context.commit('GET_COLUMNS', response.data)
-        context.commit('SET_LOADING_STATUS', false)
-      })
-    },
-    readTables (context) {
-      context.commit('SET_LOADING_STATUS', true)
-      axios.post('/api/source/readtables').then(response => {
-        console.log(response.data)
-        context.commit('GET_TABLES', response.data)
-        context.commit('SET_LOADING_STATUS', false)
-      })
-    },
-    sourceLogin ({ commit, dispatch }, data) {
-      // will handle logging into source db
+    readSrcColumns ({ commit, dispatch }, tableName) {
       commit('SET_LOADING_STATUS', true)
-      axios.post('/api/source/login', {
-        server: data.server,
-        username: data.username,
-        password: data.password
+      var motherObj = []
+      var jsonObj = {}
+      axios.post('/api/source/readcolumns', {
+        table: tableName
       })
         .then(response => {
-          if (response.status === 200) {
-            dispatch('initReadDB')
-            commit('SET_LOADING_STATUS', false)
-            commit('SET_LOGIN_SRC_STATUS', true)
+          var columns = response.data
+          for (var c = 0; c < columns.length; ++c) {
+            var colName = columns[c].COLUMN_NAME
+            jsonObj[c] = colName
+            motherObj.push(colName)
           }
-        })
-        .catch(error => {
-          console.log(error)
+          // console.log(jsonObj)
+          // console.log(motherObj)
+          commit('SET_MIGRATE_COLUMNS', { tableName, motherObj })
+          // console.log(columns)
+          commit('GET_COLUMNS', columns)
+          commit('SET_LOADING_STATUS', false)
         })
     },
-    destLogin (server, username, password) {
-      // will handle logging into destination db
-    },
-    getData ({ commit, dispatch }, dbName) {
+    readSrcTables ({ commit, dispatch }) {
       commit('SET_LOADING_STATUS', true)
-      axios.get('/api/source/all_data', {
-        db: dbName
+      axios.get('/api/source/readtables').then(response => {
+        commit('GET_TABLES', response.data)
+        commit('SET_LOADING_STATUS', false)
+      })
+    },
+    readDestTables ({ commit, dispatch }) {
+      commit('SET_LOADING_STATUS', true)
+      axios.get(`/api/dest/readtables`).then(response => {
+        commit('SET_DEST_TABLES', response.data)
+        commit('SET_LOADING_STATUS', false)
+      })
+    },
+    readDestColumns ({ commit, dispatch }) {
+      commit('SET_LOADING_STATUS', true)
+      axios.get('/api/dest/readcolumns').then(response => {
+        commit('SET_DEST_COLUMNS', response.data)
+        commit('SET_LOADING_STATUS', false)
+      })
+    },
+    getData ({ commit, dispatch }, data) {
+      commit('SET_LOADING_STATUS', true)
+      axios.post('/api/source/all_data', {
+        table: data.table,
+        column: data.col
       })
         .then(response => {
           commit('GET_DATA', response.data)
           commit('SET_LOADING_STATUS', false)
         })
     },
-    getuseridData (context) {
-      context.commit('SET_LOADING_STATUS', true)
-      axios.get('/api/user_id_column').then(response => {
-        context.commit('GET_DATA', response.data)
-        context.commit('SET_LOADING_STATUS', false)
-      })
-    },
-    getgenderData (context) {
-      context.commit('SET_LOADING_STATUS', true)
-      axios.get('/api/gender_column').then(response => {
-        context.commit('GET_DATA', response.data)
-        context.commit('SET_LOADING_STATUS', false)
-      })
-    },
-    getnameData (context) {
-      context.commit('SET_LOADING_STATUS', true)
-      axios.get('/api/name_columns').then(response => {
-        context.commit('GET_DATA', response.data)
-        context.commit('SET_LOADING_STATUS', false)
-      })
-    },
-    getmaleData (context) {
-      context.commit('SET_LOADING_STATUS', true)
-      axios.get('/api/male_columns').then(response => {
-        context.commit('GET_DATA', response.data)
-        context.commit('SET_LOADING_STATUS', false)
+    startMigration ({ commit, dispatch }, type) {
+      console.log('starting migration...')
+      commit('SET_LOADING_STATUS', true)
+      axios.post('/api/source/startmigration', {
+        dbType: type
+      }).then(response => {
+        console.log(response.data)
+        dispatch('readDestTables')
+        commit('SET_LOADING_STATUS', false)
       })
     }
   },

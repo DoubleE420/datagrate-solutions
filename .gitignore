@@ -1,5 +1,4 @@
 node_modules/
-database/
-database2/
+database*/
 *-lock.json
 .env

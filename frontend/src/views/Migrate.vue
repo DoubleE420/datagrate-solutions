@@ -5,105 +5,15 @@
         justify="space-around"
       >
         <v-col>
-          <v-card
-            class="pa-4 text-center"
-          >
-            <v-form
-            >
-              <v-text-field
-                v-model="serverSrc"
-                :disabled="sourceLoginStatus"
-                required
-                type="text"
-                label="Source database hostname/IP"
-              ></v-text-field>
-              <v-text-field
-                v-model="usernameSrc"
-                v-if="sourceloginStatus"
-                required
-                type="text"
-                label="Username"
-              ></v-text-field>
-              <v-text-field
-                v-model="passwordSrc"
-                v-if="sourceloginStatus"
-                required
-                type="password"
-                label="Password"
-              ></v-text-field>
-              <v-btn
-                @click="submitSrc()"
-                v-if="!sourceLoginStatus"
-              >
-                Login and Get Databases
-              </v-btn>
-            </v-form>
-            <v-menu
-              offset-y
-              v-if="sourceLoginStatus"
-            >
-              <template v-slot:activator="{ on }">
-                <v-btn
-                  outlined
-                  v-on="on"
-                >
-                  <span>{{ sourceDBName }}</span>
-                  <v-icon right>mdi-menu-down</v-icon>
-                </v-btn>
-              </template>
-              <v-list>
-                <v-list-item
-                  v-for="(item, index) in sourceDBs"
-                  :key="index"
-                  @click="updateDBName(item.Database)"
-                >
-                  <v-list-item-title>{{ item.Database }}</v-list-item-title>
-                </v-list-item>
-              </v-list>
-            </v-menu>
-          </v-card>
-        </v-col>
-        <v-col>
-          <v-card
-          >
-            <v-form
-              class="pa-4"
-            >
-              <v-text-field
-                v-model="serverDest"
-                required
-                type="text"
-                label="Destination database hostname/IP"
-              ></v-text-field>
-              <v-text-field
-                v-model="usernameDest"
-                required
-                type="text"
-                label="Username"
-              ></v-text-field>
-              <v-text-field
-                v-model="passwordDest"
-                required
-                type="password"
-                label="Password"
-              ></v-text-field>
-              <v-btn
-                @click="submitDest"
-              >
-                Login
-              </v-btn>
-            </v-form>
-          </v-card>
-        </v-col>
-      </v-row>
-      <v-row
-        justify="space-around"
-      >
-        <v-col>
           <v-row
             class="justify-center"
           >
           </v-row>
+          <h1
+            class="text-center tw-text-2xl mb-4"
+          >
+            Source: MySQL
+          </h1>
           <v-card>
             <v-card-title
               class="justify-center"
@@ -111,6 +21,18 @@
               Origin Database Tables
             </v-card-title>
           </v-card>
+          <div v-for="table in migrateColumns" :key="table.id">
+            <v-card
+              class="mx-4 mt-4 pa-4"
+            >
+              <v-card-title>
+                {{ table.tableName }}
+              </v-card-title>
+              <div v-for="col in table.motherObj" :key="col.id">
+                {{ col }}
+              </div>
+            </v-card>
+          </div>
         </v-col>
         <v-icon
           large
@@ -120,14 +42,80 @@
             class="justify-center"
           >
           </v-row>
+          <h1
+            class="text-center tw-text-2xl mb-4"
+          >
+            Destination: {{ type }}
+          </h1>
+          <v-btn
+            @click="readDestTables"
+          >Refresh</v-btn>
           <v-card>
             <v-card-title
               class="justify-center"
             >
-              Desination Database Tables (Expected)
+              Desination Database Tables
             </v-card-title>
           </v-card>
+          <div v-if="type !== 'None'">
+            <div v-for="table in destDBTables" :key="table.id">
+              <v-card
+                class="ma-4"
+              >
+                <v-card-title>
+                  {{ table }}
+                </v-card-title>
+              </v-card>
+            </div>
+          </div>
         </v-col>
+      </v-row>
+      <v-row
+        class="mx-auto"
+        justify="space-around"
+      >
+        <v-card
+          class="text-center"
+        >
+          <v-card-title
+            class="tw-text-xl"
+          >
+            Migrate source database to:
+          </v-card-title>
+          <v-row
+            justify="space-around"
+          >
+            <v-menu
+              offset-y
+            >
+              <template v-slot:activator="{ on }">
+                <v-btn
+                  outlined
+                  v-on="on"
+                >
+                  <span>{{ type }}</span>
+                  <v-icon right>mdi-menu-down</v-icon>
+                </v-btn>
+              </template>
+              <v-list>
+                <v-list-item
+                  v-for="(item, index) in migrateTypes"
+                  :key="index"
+                  @click="type = item"
+                >
+                  <v-list-item-title>{{ item }}</v-list-item-title>
+                </v-list-item>
+              </v-list>
+            </v-menu>
+          </v-row>
+          <v-btn
+            color="success"
+            class="my-4"
+            @click="startMigration(type)"
+          >
+            Start Migration
+          </v-btn>
+        </v-card>
       </v-row>
     </v-content>
   </v-container>
@@ -141,41 +129,32 @@ export default {
   components: {
   },
   data: () => ({
-    sourceDBName: 'Select A Database',
-    serverSrc: '',
-    usernameSrc: '',
-    passwordSrc: '',
-    serverDest: '',
-    usernameDest: '',
-    passwordDest: ''
+    type: 'None'
   }),
   mounted () {
-    this.initReadDB()
+    // this.readSrcTables()
+    this.readDestTables()
+    this.readDestColumns()
   },
   methods: {
     updateDBName (name) {
       this.sourceDBName = name
     },
     ...mapActions([
-      'initReadDB',
-      'sourceLogin',
-      'destLogin'
+      'readSrcTables',
+      'readDestTables',
+      'readSrcColumns',
+      'readDestColumns',
+      'startMigration'
     ]),
-    submitSrc () {
-      console.log('logging into src')
-      this.sourceLogin({
-        server: this.serverSrc,
-        username: this.usernameSrc,
-        password: this.passwordSrc
-      })
+    getColumns (table) {
+      var name = Object.values(table)[0]
+      var columns = this.readSrcColumns(name)
+      // console.log(columns)
+      return columns
     },
-    submitDest () {
-      console.log('logging into dest')
-      this.destLogin({
-        server: this.serverDest,
-        username: this.serverDest,
-        password: this.passwordDest
-      })
+    getTableName (item) {
+      return Object.values(item)[0]
     }
   },
   computed: {
@@ -184,8 +163,12 @@ export default {
     },
     ...mapState([
       'data',
-      'sourceDBs',
-      'sourceLoginStatus'
+      'srcDBTables',
+      'srcTableColumns',
+      'sourceLoginStatus',
+      'migrateColumns',
+      'destDBTables',
+      'migrateTypes'
     ])
   }
 }

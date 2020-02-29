@@ -21,8 +21,9 @@
             </v-card-title>
             <v-card-text>
               Datagrate was conceived to provide data solutions to both the technology professional and the end user.
-              By having a uniquely created pipeline, our solution allows for extracting, transforming and loading into
-              user data stores which then allow for easy management and integration.
+              By having a uniquely created pipeline, our solution allows for viewing data within any supported database
+              and also allows migrating any data from a source database to a supported destination database with 0 downtime.
+              Depending on how much data is in the source, a MySQL database can be migrated to PostgreSQL within a matter of seconds.
             </v-card-text>
           </v-card>
           <v-spacer></v-spacer>

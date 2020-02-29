@@ -125,16 +125,6 @@
             </v-card-text>
           </v-card>
         </v-row>
-        <v-row
-          justify="space-around"
-        >
-          <v-btn
-            class="mt-4"
-            color="primary_button"
-          >
-            View Use Cases
-          </v-btn>
-        </v-row>
       </v-sheet>
     </v-container>
   </div>

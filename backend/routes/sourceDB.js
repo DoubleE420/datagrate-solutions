@@ -4,6 +4,7 @@ var srcDB = require('../plugins/srcDBConn.js');
 
 const { exec } = require('child_process')
 
+// build custom JSON object to have both tables and columns in the "migrate" page
 function plsWork (req, res, next) {
   console.log('\nRequest in plsWork:')
   console.log(req)
@@ -25,11 +26,12 @@ function plsWork (req, res, next) {
   })
 }
 
-/* GET home page. */
+// sanity check to make sure backend is online
 router.get('/', function(req, res, next) {
   res.send('source router works')
 });
 
+// /api/source/startmigration endpoint, starts themigration from mysql to postgresql
 router.post('/startmigration', function(req, res, next) {
   data = req.body.dbType
   console.log('Migrating to: ' + data)
@@ -37,6 +39,7 @@ router.post('/startmigration', function(req, res, next) {
     case 'None':
       res.send('Invalid type')
       break
+    // if the user clicks the "PostgreSQL" on the migrate page..... use pgloader and migrate it to postgresql
     case 'PostgreSQL':
       exec(`pgloader mysql://${process.env.SRCDBUSER}:${process.env.SRCDBPASS}@${process.env.SRCDBHOST}/${process.env.SRCDBDATABASE} pgsql://${process.env.DESTDBUSER}:${process.env.DESTDBPASS}@${process.env.DESTDBHOST}/${process.env.DESTDBDATABASE}`, (error, stdout, stderr) => {
         if (error) {
@@ -49,7 +52,9 @@ router.post('/startmigration', function(req, res, next) {
         res.send(stdout)
       })
       break
+    // if the user clicks the "MySQL" on the migration page..... dump the database to a .sql file then import it into the new database
     case 'MySQL':
+      // dumps the database to a file
       exec(`mysqldump -h ${process.env.SRCDBHOST} -P ${process.env.SRCDBPORT} -u ${process.env.SRCDBUSER} -p${process.env.SRCDBPASS} --all-databases > /dbdump/${process.env.SRCDBHOST}-all-databases.sql`, (error, stdout, stderr) => {
         if (error) {
           console.log(error)
@@ -59,6 +64,7 @@ router.post('/startmigration', function(req, res, next) {
         }
         console.log(stdout)
       })
+      // imports the dumped file into the new database
       exec(`mysql -h ${process.env.DESTDBHOST} -P ${process.env.DESTDBPORT} -u ${process.env.DESTDBUSER} -p${process.env.DESTDBPASS} ${process.env.DESTDBDATABASE} < /dbdump/${process.env.SRCDBHOST}-all-databases.sql`, (importerror, importstdout, importstderr) => {
         if (importerror) {
           console.log(importerror)
@@ -72,6 +78,7 @@ router.post('/startmigration', function(req, res, next) {
   }
 })
 
+// reads the tables from the source database
 router.get('/init', function(req, res, next) {
   console.log('\nINIT\n')
   var obj = []
@@ -91,6 +98,7 @@ router.get('/init', function(req, res, next) {
   })
 })
 
+// read the columns from the table that's selected
 router.post('/readcolumns', function(req, res, next) {
   data = req.body
   srcDB.query(`SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = N'` + data.table + `'`, function (error, results, fields) {
@@ -99,6 +107,7 @@ router.post('/readcolumns', function(req, res, next) {
   })
 })
 
+// read all tables in the database
 router.get('/readtables', function(req, res, next) {
   srcDB.query('SHOW TABLES', function (error, results, fields) {
     if (error) throw error
@@ -106,6 +115,7 @@ router.get('/readtables', function(req, res, next) {
   })
 })
 
+// endpoint to pull all data
 router.post('/all_data', function(req, res, next) {
   console.log('getting data')
   var column = req.body.column

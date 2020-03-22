@@ -18,32 +18,6 @@ export default new Vuex.Store({
     sourceDBs: '',
     data: '',
     migrateColumns: [],
-    firstStatementTypes: [
-      {
-        name: 'SELECT',
-        id: 1
-      },
-      {
-        name: 'UPDATE',
-        id: 2
-      },
-      {
-        name: 'DELETE',
-        id: 3
-      },
-      {
-        name: 'INSERT INTO',
-        id: 4
-      },
-      {
-        name: 'CREATE DATABASE',
-        id: 5
-      },
-      {
-        name: 'ALTER DATABASE',
-        id: 6
-      }
-    ],
     srcTableColumns: 'lol',
     srcDBTables: [],
     destDBTables: [],

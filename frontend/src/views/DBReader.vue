@@ -86,6 +86,17 @@
           class="mt-4"
         ></v-data-table>
       </v-card>
+      <download-csv
+        v-show="data"
+        :data   = "data"
+        class="text-center mt-8"
+      >
+        <v-btn
+          color="success"
+        >
+          Download Data
+        </v-btn>
+      </download-csv>
       <!--
       <v-row>
         <v-col

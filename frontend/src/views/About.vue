@@ -71,10 +71,9 @@
                 <v-card-title>Sean Batt</v-card-title>
                 <v-card-subtitle>data migrations - cofounder</v-card-subtitle>
                 <v-card-text>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
-                  dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-                  aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-                  cillum dolore eu fugiat nulla pariatur.
+                  Hello, my name is Sean Batt; I attended the University of Cincinnati where I studied Information Technology,
+                  specializing in Networking and Systems. As a professional, my focus has been on Network Infrastructure and System Engineering and Support.
+                  I am originally from Cincinnati, Ohio, and currently work in Technology Department for the Cincinnati Reds.
                 </v-card-text>
               </div>
               <div class="tw-w-1/3">

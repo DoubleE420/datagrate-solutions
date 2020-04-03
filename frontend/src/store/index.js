@@ -8,6 +8,7 @@ Vue.use(VueAxios, axios)
 
 export default new Vuex.Store({
   state: {
+    alertStatus: false,
     loadingStatus: false,
     migrateTypes: [
       'MySQL',
@@ -26,6 +27,9 @@ export default new Vuex.Store({
   mutations: {
     SET_LOADING_STATUS (state, status) {
       state.loadingStatus = status
+    },
+    SET_ALERT_STATUS (state, data) {
+      state.alertStatus = data
     },
     GET_SOURCE_DB (state, data) {
       state.sourceDBs = data
@@ -125,6 +129,7 @@ export default new Vuex.Store({
       }).then(response => {
         console.log(response.data)
         dispatch('readDestTables')
+        commit('SET_ALERT_STATUS', true)
         commit('SET_LOADING_STATUS', false)
       })
     }

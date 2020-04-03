@@ -13,6 +13,14 @@
         ></v-progress-circular>
       </v-overlay>
       <router-view></router-view>
+      <v-snackbar
+        v-model="alert"
+        color="success"
+        class="text-center"
+        top
+      >
+        Migration Complete!
+      </v-snackbar>
     </v-content>
     <footer
       class="mt-4 tw-bg-blue-700 pa-4 tw-border-t tw-border-1 tw-border-gray-100"
@@ -84,14 +92,15 @@ export default {
     Nav
   },
   data: () => ({
-    //
+    alert: false
   }),
   computed: {
     localComputedThingy () {
       return 'something interesting'
     },
     ...mapState([
-      'loadingStatus'
+      'loadingStatus',
+      'alertStatus'
     ])
   },
   methods: {
@@ -101,6 +110,12 @@ export default {
   },
   mounted () {
     this.initReadDB()
+  },
+  watch: {
+    alertStatus: function () {
+      console.log('status changed')
+      this.alert = true
+    }
   }
 }
 </script>

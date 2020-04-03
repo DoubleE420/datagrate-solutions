@@ -49,7 +49,7 @@ router.post('/startmigration', function(req, res, next) {
           console.log(stderr)
         }
         console.log(stdout)
-        res.send(stdout)
+        res.send(stdout).status(200)
       })
       break
     // if the user clicks the "MySQL" on the migration page..... dump the database to a .sql file then import it into the new database
@@ -73,6 +73,7 @@ router.post('/startmigration', function(req, res, next) {
           console.log(importstderr)
         }
         console.log(importstdout)
+        res.send(importstdout).status(200)
       })
       break
   }

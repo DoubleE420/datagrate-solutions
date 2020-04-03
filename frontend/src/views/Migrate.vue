@@ -47,9 +47,6 @@
           >
             Destination: {{ type }}
           </h1>
-          <v-btn
-            @click="readDestTables"
-          >Refresh</v-btn>
           <v-card>
             <v-card-title
               class="justify-center"

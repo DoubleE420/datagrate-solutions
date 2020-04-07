@@ -61,8 +61,12 @@
         </v-overlay>
         <v-btn
           icon
-          @click.stop="alert = false"
-        >X</v-btn>
+          @click.stop="alert = false; setAlert({
+            status: false,
+            text: ''
+          })"
+        >
+        <v-icon>mdi-close-box</v-icon></v-btn>
       </v-snackbar>
       <!--
         end completion alert
@@ -155,7 +159,8 @@ export default {
   methods: {
     ...mapActions([
       'initReadDB',
-      'resetTables'
+      'resetTables',
+      'setAlert'
     ])
   },
   mounted () {
@@ -164,7 +169,7 @@ export default {
   watch: {
     alertStatus: function () {
       console.log('status changed')
-      this.alert = true
+      this.alert = this.alertStatus
     }
   }
 }

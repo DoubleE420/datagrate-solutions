@@ -144,11 +144,18 @@ export default new Vuex.Store({
       }).then(response => {
         console.log(response.data)
         dispatch('readDestTables', type.dbType)
-        commit('SET_ALERT_STATUS', {
-          data: true,
+        dispatch('setAlert', {
+          status: true,
           text: response.data
         })
         commit('SET_LOADING_STATUS', false)
+      })
+    },
+    setAlert ({ commit, dispatch }, alertData) {
+      console.log(alertData)
+      commit('SET_ALERT_STATUS', {
+        data: alertData.status,
+        text: alertData.text
       })
     },
     resetTables ({ commit, dispatch }) {

@@ -1,128 +1,111 @@
 <template>
-  <v-container>
-    <v-content>
-      <v-card
-        class="text-center pb-6"
-      >
-        <div class="tw-flex tw-flex-wrap justify-center align-center">
-          <v-card-title class="justify-center">Select the Table:</v-card-title>
-          <v-menu
-            offset-y
-          >
-            <template v-slot:activator="{ on }">
-              <v-btn
-                outlined
-                v-on="on"
-              >
-                <span>{{ currentTable }}</span>
-                <v-icon right>mdi-menu-down</v-icon>
-              </v-btn>
-            </template>
-            <v-list>
-              <v-list-item
-                v-for="(item, index) in srcDBTables"
-                :key="index"
-                @click="selTable(item)"
-              >
-                <v-list-item-title>{{ getTableName(item) }}</v-list-item-title>
-              </v-list-item>
-            </v-list>
-          </v-menu>
-        </div>
-        <div
-          v-show="selectedTable"
+  <div>
+    <v-img
+      src="../../public/img/Subpage_backgrounds.png"
+      class="tw-absolute"
+      max-height="100%"
+    ></v-img>
+    <v-container>
+      <v-content>
+        <v-card
+          class="text-center pb-6"
         >
-          <hr class="mx-8 mt-4 tw-border-1 tw-border-gray-400"/>
-          <v-card-title
-            class="justify-center"
-          >
-            Select the column:
-          </v-card-title>
+          <div class="tw-flex tw-flex-wrap justify-center align-center">
+            <v-card-title class="justify-center">Select the Table:</v-card-title>
+            <v-menu
+              offset-y
+            >
+              <template v-slot:activator="{ on }">
+                <v-btn
+                  outlined
+                  v-on="on"
+                >
+                  <span>{{ currentTable }}</span>
+                  <v-icon right>mdi-menu-down</v-icon>
+                </v-btn>
+              </template>
+              <v-list>
+                <v-list-item
+                  v-for="(item, index) in srcDBTables"
+                  :key="index"
+                  @click="selTable(item)"
+                >
+                  <v-list-item-title>{{ getTableName(item) }}</v-list-item-title>
+                </v-list-item>
+              </v-list>
+            </v-menu>
+          </div>
           <div
-            class="tw-flex tw-flex-wrap justify-center"
+            v-show="selectedTable"
           >
-            <v-btn
-              class="ma-2"
-              @click="getData({
-                table: currentTable,
-                col: '*'
-              }); clickedData()"
-            >*</v-btn>
+            <hr class="mx-8 mt-4 tw-border-1 tw-border-gray-400"/>
+            <v-card-title
+              class="justify-center"
+            >
+              Select the column:
+            </v-card-title>
             <div
-              v-for="(item, index) in srcTableColumns"
-              :key="index"
-              @click="selColumn(item)"
-              class="text-center"
+              class="tw-flex tw-flex-wrap justify-center"
             >
               <v-btn
                 class="ma-2"
                 @click="getData({
                   table: currentTable,
-                  col: item.COLUMN_NAME
+                  col: '*'
                 }); clickedData()"
+              >*</v-btn>
+              <div
+                v-for="(item, index) in srcTableColumns"
+                :key="index"
+                @click="selColumn(item)"
+                class="text-center"
               >
-                {{ item.COLUMN_NAME }} Data
-              </v-btn>
+                <v-btn
+                  class="ma-2"
+                  @click="getData({
+                    table: currentTable,
+                    col: item.COLUMN_NAME
+                  }); clickedData()"
+                >
+                  {{ item.COLUMN_NAME }} Data
+                </v-btn>
+              </div>
             </div>
           </div>
-        </div>
-      </v-card>
-      <v-card
-        v-if="selected"
-      >
-        <v-text-field
-          v-model="search"
-          append-icon="mdi-magnify"
-          label="Search"
-          single-line
-          hide-details
-          class="ma-4"
-        ></v-text-field>
-        <v-data-table
-          :items="data"
-          :headers="getHeaders(data)"
-          :items-per-page="5"
-          :search="search"
-          class="mt-4"
-        ></v-data-table>
-      </v-card>
-      <download-csv
-        v-show="data"
-        :data   = "data"
-        class="text-center mt-8"
-      >
-        <v-btn
-          color="success"
+        </v-card>
+        <v-card
+          v-if="selected"
         >
-          Download Data
-        </v-btn>
-      </download-csv>
-      <!--
-      <v-row>
-        <v-col
-          class="tw-flex tw-flex-wrap"
+          <v-text-field
+            v-model="search"
+            append-icon="mdi-magnify"
+            label="Search"
+            single-line
+            hide-details
+            class="ma-4"
+          ></v-text-field>
+          <v-data-table
+            :items="data"
+            :headers="getHeaders(data)"
+            :items-per-page="5"
+            :search="search"
+            class="mt-4"
+          ></v-data-table>
+        </v-card>
+        <download-csv
+          v-show="data"
+          :data   = "data"
+          class="text-center mt-8"
         >
-          <div v-for="(dataItem, index) in data" v-bind:key="index" class="mt-4 tw-w-1/3">
-            <v-card
-              class="mx-4"
-            >
-              <div class="px-4 pt-4 pb-1">
-                <p v-for="(item, index) in dataItem" :key="index">
-                  <span class="tw-font-bold">
-                    {{ index }}:
-                  </span>
-                  <span>
-                    {{ item }}
-                  </span>
-                </p>
-              </div>
-            </v-card>
-          </div>
-        </v-col>
-      </v-row>
-      -->
-    </v-content>
-  </v-container>
+          <v-btn
+            color="success"
+          >
+            Download Data
+          </v-btn>
+        </download-csv>
+      </v-content>
+    </v-container>
+  </div>
 </template>
 
 <script>

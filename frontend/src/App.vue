@@ -69,7 +69,7 @@
       -->
     </v-content>
     <footer
-      class="mt-4 tw-bg-blue-700 pa-4 tw-border-t tw-border-1 tw-border-gray-100"
+      class="tw-bg-blue-700 pa-4 tw-border-t tw-border-1 tw-border-gray-100"
     >
       <v-row
         justify="space-around"

@@ -1,156 +1,163 @@
 <template>
-  <v-container>
-    <v-content>
-      <v-row
-        justify="space-around"
-      >
-        <v-col>
-          <v-row
-            class="justify-center"
-          >
-          </v-row>
-          <h1
-            class="text-center tw-text-2xl mb-4"
-          >
-            Source: MySQL
-          </h1>
-          <v-card>
-            <v-card-title
+  <div>
+    <v-img
+      src="../../public/img/Subpage_backgrounds.png"
+      class="tw-absolute"
+      max-height="100%"
+    ></v-img>
+    <v-container>
+      <v-content>
+        <v-row
+          justify="space-around"
+        >
+          <v-col>
+            <v-row
               class="justify-center"
             >
-              Origin Database Tables
-            </v-card-title>
-          </v-card>
-          <div v-for="table in srcDBTables" :key="table.id">
-            <v-card
-              class="mx-4 mt-4 pa-4"
+            </v-row>
+            <h1
+              class="text-center tw-text-2xl mb-4"
             >
-              <v-card-title>
-                {{ getTableName(table) }}
-              </v-card-title>
-              <div v-for="col in table.motherObj" :key="col.id">
-                {{ col }}
-              </div>
-            </v-card>
-          </div>
-        </v-col>
-        <v-icon
-          large
-        >mdi-arrow-right</v-icon>
-        <v-col>
-          <v-row
-            class="justify-center"
-          >
-          </v-row>
-          <h1
-            class="text-center tw-text-2xl mb-4"
-          >
-            Destination: {{ dbType }}
-          </h1>
-          <v-card>
-            <v-card-title
-              class="justify-center"
-            >
-              Desination Database Tables
-            </v-card-title>
-          </v-card>
-          <div v-if="dbType !== 'None'">
-            <div v-for="table in destDBTables" :key="table.id">
-              <v-card
-                class="ma-4"
+              Source: MySQL
+            </h1>
+            <v-card>
+              <v-card-title
+                class="justify-center"
               >
-                <v-card-title
-                  v-if="table.Tables_in_datagrate"
-                >
-                  {{ table.Tables_in_datagrate }}
+                Origin Database Tables
+              </v-card-title>
+            </v-card>
+            <div v-for="table in srcDBTables" :key="table.id">
+              <v-card
+                class="mx-4 mt-4 pa-4"
+              >
+                <v-card-title>
+                  {{ getTableName(table) }}
                 </v-card-title>
-                <v-card-title
-                  v-else
-                >
-                  {{ table }}
-                </v-card-title>
+                <div v-for="col in table.motherObj" :key="col.id">
+                  {{ col }}
+                </div>
               </v-card>
             </div>
-          </div>
-        </v-col>
-      </v-row>
-      <v-row
-        class="mx-auto"
-        justify="space-around"
-      >
-        <v-card
-          class="text-center px-4"
+          </v-col>
+          <v-icon
+            large
+          >mdi-arrow-right</v-icon>
+          <v-col>
+            <v-row
+              class="justify-center"
+            >
+            </v-row>
+            <h1
+              class="text-center tw-text-2xl mb-4"
+            >
+              Destination: {{ dbType }}
+            </h1>
+            <v-card>
+              <v-card-title
+                class="justify-center"
+              >
+                Desination Database Tables
+              </v-card-title>
+            </v-card>
+            <div v-if="dbType !== 'None'">
+              <div v-for="table in destDBTables" :key="table.id">
+                <v-card
+                  class="ma-4"
+                >
+                  <v-card-title
+                    v-if="table.Tables_in_datagrate"
+                  >
+                    {{ table.Tables_in_datagrate }}
+                  </v-card-title>
+                  <v-card-title
+                    v-else
+                  >
+                    {{ table }}
+                  </v-card-title>
+                </v-card>
+              </div>
+            </div>
+          </v-col>
+        </v-row>
+        <v-row
+          class="mx-auto"
+          justify="space-around"
         >
-          <v-card-title
-            class="tw-text-xl"
+          <v-card
+            class="text-center px-4"
           >
-            Migrate source database to:
-          </v-card-title>
-          <v-row
-            justify="space-around"
-          >
-            <v-menu
-              offset-y
+            <v-card-title
+              class="tw-text-xl"
             >
-              <template v-slot:activator="{ on }">
-                <v-btn
-                  outlined
-                  v-on="on"
-                >
-                  <span>{{ dbType }}</span>
-                  <v-icon right>mdi-menu-down</v-icon>
-                </v-btn>
-              </template>
-              <v-list>
-                <v-list-item
-                  v-for="(item, index) in migrateTypes"
-                  :key="index"
-                  @click="dbType = item"
-                >
-                  <v-list-item-title>{{ item }}</v-list-item-title>
-                </v-list-item>
-              </v-list>
-            </v-menu>
-          </v-row>
-          <div class="tw-flex tw-flex-wrap justify-center align-center"
-            v-show="dbType === 'MySQL'"
-          >
-            <v-card-title class="justify-center">Select the Table:</v-card-title>
-            <v-menu
-              offset-y
+              Migrate source database to:
+            </v-card-title>
+            <v-row
+              justify="space-around"
             >
-              <template v-slot:activator="{ on }">
-                <v-btn
-                  outlined
-                  v-on="on"
-                >
-                  <span>{{ currentTable }}</span>
-                  <v-icon right>mdi-menu-down</v-icon>
-                </v-btn>
-              </template>
-              <v-list>
-                <v-list-item
-                  v-for="(item, index) in srcDBTables"
-                  :key="index"
-                  @click="selTable(item)"
-                >
-                  <v-list-item-title>{{ getTableName(item) }}</v-list-item-title>
-                </v-list-item>
-              </v-list>
-            </v-menu>
-          </div>
-          <v-btn
-            color="success"
-            class="my-4"
-            @click="startMigration({dbType, currentTable})"
-            v-show="currentTable !== 'None' || dbType === 'PostgreSQL'"
-          >
-            Start Migration
-          </v-btn>
-        </v-card>
-      </v-row>
-    </v-content>
-  </v-container>
+              <v-menu
+                offset-y
+              >
+                <template v-slot:activator="{ on }">
+                  <v-btn
+                    outlined
+                    v-on="on"
+                  >
+                    <span>{{ dbType }}</span>
+                    <v-icon right>mdi-menu-down</v-icon>
+                  </v-btn>
+                </template>
+                <v-list>
+                  <v-list-item
+                    v-for="(item, index) in migrateTypes"
+                    :key="index"
+                    @click="dbType = item"
+                  >
+                    <v-list-item-title>{{ item }}</v-list-item-title>
+                  </v-list-item>
+                </v-list>
+              </v-menu>
+            </v-row>
+            <div class="tw-flex tw-flex-wrap justify-center align-center"
+              v-show="dbType === 'MySQL'"
+            >
+              <v-card-title class="justify-center">Select the Table:</v-card-title>
+              <v-menu
+                offset-y
+              >
+                <template v-slot:activator="{ on }">
+                  <v-btn
+                    outlined
+                    v-on="on"
+                  >
+                    <span>{{ currentTable }}</span>
+                    <v-icon right>mdi-menu-down</v-icon>
+                  </v-btn>
+                </template>
+                <v-list>
+                  <v-list-item
+                    v-for="(item, index) in srcDBTables"
+                    :key="index"
+                    @click="selTable(item)"
+                  >
+                    <v-list-item-title>{{ getTableName(item) }}</v-list-item-title>
+                  </v-list-item>
+                </v-list>
+              </v-menu>
+            </div>
+            <v-btn
+              color="success"
+              class="my-4"
+              @click="startMigration({dbType, currentTable})"
+              v-show="currentTable !== 'None' || dbType === 'PostgreSQL'"
+            >
+              Start Migration
+            </v-btn>
+          </v-card>
+        </v-row>
+      </v-content>
+    </v-container>
+  </div>
 </template>
 
 <script>

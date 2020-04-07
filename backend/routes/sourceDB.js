@@ -55,7 +55,11 @@ router.post('/startmigration', function(req, res, next) {
     // if the user clicks the "MySQL" on the migration page..... dump the database to a .sql file then import it into the new database
     case 'MySQL':
       // dumps the database to a file
-      exec(`mysqldump -h ${process.env.SRCDBHOST} -P ${process.env.SRCDBPORT} -u ${process.env.SRCDBUSER} -p${process.env.SRCDBPASS} --all-databases > /dbdump/${process.env.SRCDBHOST}-all-databases.sql`, (error, stdout, stderr) => {
+      if ((process.env.DESTDBTYPE).toLowerCase() !== (data).toLowerCase()) {
+        res.send('error').status(404)
+        break
+      }
+      exec(`mysqldump -h ${process.env.SRCDBHOST} -P ${process.env.SRCDBPORT} -u ${process.env.SRCDBUSER} -p${process.env.SRCDBPASS} ${process.env.SRCDBDATABASE} > /dbdump/${process.env.SRCDBHOST}-${process.env.SRCDBDATABASE}.sql`, (error, stdout, stderr) => {
         if (error) {
           console.log(error)
         }
@@ -65,15 +69,18 @@ router.post('/startmigration', function(req, res, next) {
         console.log(stdout)
       })
       // imports the dumped file into the new database
-      exec(`mysql -h ${process.env.DESTDBHOST} -P ${process.env.DESTDBPORT} -u ${process.env.DESTDBUSER} -p${process.env.DESTDBPASS} ${process.env.DESTDBDATABASE} < /dbdump/${process.env.SRCDBHOST}-all-databases.sql`, (importerror, importstdout, importstderr) => {
+      exec(`mysql -h ${process.env.DESTDBHOST} -P ${process.env.DESTDBPORT} -u ${process.env.DESTDBUSER} -p${process.env.DESTDBPASS} ${process.env.DESTDBDATABASE} < /dbdump/${process.env.SRCDBHOST}-${process.env.SRCDBDATABASE}.sql`, (importerror, importstdout, importstderr) => {
         if (importerror) {
           console.log(importerror)
         }
         if (importstderr) {
           console.log(importstderr)
         }
-        console.log(importstdout)
-        res.send(importstdout).status(200)
+        while (!importstdout) {
+          console.log('not yet')
+          // res.send(importstdout).status(200)
+        }
+
       })
       break
   }

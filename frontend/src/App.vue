@@ -101,11 +101,6 @@
           <li>Destinations:</li>
           <li>MySQL</li>
           <li>PostgreSQL</li>
-          <li><p></p></li>
-          <li>On the Roadmap:</li>
-          <li>NoSQL (Source)</li>
-          <li>PostgreSQL (Source)</li>
-          <li>MSSQL (Destination)</li>
         </ul>
         <ul class="text-center">
           <p class="tw-font-bold">Meet the Founders:</p>
@@ -141,7 +136,7 @@ export default {
     Nav
   },
   data: () => ({
-    alert: true,
+    alert: false,
     viewDetails: false
   }),
   computed: {

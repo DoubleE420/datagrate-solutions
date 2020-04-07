@@ -66,6 +66,7 @@ router.post('/startmigration', function(req, res, next) {
         console.log(stdout)
         console.log('exported file, importing.....')
         // imports the dumped file into the new database
+        srcDB.query(`USE ${process.env.MYSQLDATABASE}`)
         exec(`mysql -h ${process.env.MYSQLHOST} -P ${process.env.MYSQLPORT} -u ${process.env.MYSQLUSER} -p${process.env.MYSQLPASS} ${process.env.MYSQLDATABASE} < /dbdump/${process.env.SRCDBHOST}-${process.env.SRCDBDATABASE}-${tableName}.sql`, (importerror, importstdout, importstderr) => {
           if (importerror) {
             console.log(importerror)

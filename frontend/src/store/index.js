@@ -150,6 +150,16 @@ export default new Vuex.Store({
         })
         commit('SET_LOADING_STATUS', false)
       })
+    },
+    resetTables ({ commit, dispatch }) {
+      console.log('resetting tables...')
+      commit('SET_LOADING_STATUS', true)
+      axios.get('/api/dest/reset')
+        .then(response => {
+          console.log(response.data)
+          commit('SET_LOADING_STATUS', false)
+          location.reload()
+        })
     }
   },
   modules: {

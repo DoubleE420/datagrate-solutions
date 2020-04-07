@@ -92,6 +92,9 @@
           <li>
             <router-link tag="div" to="/adminer" class="mb-2 tw-cursor-pointer">Adminer</router-link>
           </li>
+          <li>
+            <h1 tag="div" @click.stop="resetTables()" class="mb-2 tw-cursor-pointer">Reset</h1>
+          </li>
         </ul>
         <ul class="text-center">
           <p class="tw-font-bold">Supported Database Types</p>
@@ -151,7 +154,8 @@ export default {
   },
   methods: {
     ...mapActions([
-      'initReadDB'
+      'initReadDB',
+      'resetTables'
     ])
   },
   mounted () {

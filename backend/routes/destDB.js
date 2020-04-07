@@ -30,7 +30,8 @@ router.post('/readtables', function(req, res, next) {
     })
   }
   if (type === 'mysql') {
-    mysqlDB.query('SHOW TABLES', function (error, results, fields) {
+    mysqlDB.query(`USE ${process.env.MYSQLDATABASE}`)
+    mysqlDB.query(`SHOW TABLES`, function (error, results, fields) {
       if (error) {
         console.log(error)
       }
@@ -74,6 +75,7 @@ router.post('/readcolumns', function(req, res, next) {
   }
   
   if (type === 'mysql') {
+    mysqlDB.query(`USE ${process.env.MYSQLDATABASE}`)
     mysqlDB.query(`SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = N'` + data.table + `'`, function (error, results, fields) {
       if (error) {
         console.log(error)
@@ -84,6 +86,30 @@ router.post('/readcolumns', function(req, res, next) {
       }
     })
   }
+})
+
+router.get('/reset', function(req, res, next) {
+  console.log('resetting destination tables...')
+  var pgResult = null
+  var mysqlResult = null
+  postgresDB.query(`
+    DO $$ DECLARE
+      r RECORD;
+    BEGIN
+      FOR r IN (SELECT tablename FROM pg_tables WHERE schemaname = current_schema()) LOOP
+        EXECUTE 'DROP TABLE ' || quote_ident(r.tablename) || ' CASCADE';
+      END LOOP;
+    END $$;`, function (error, results, fields) {
+    pgResult = results
+  })
+  mysqlDB.query(`DROP DATABASE ${process.env.MYSQLDATABASE}`, function (error, results, fields) {
+    console.log(results)
+    mysqlDB.query(`CREATE DATABASE ${process.env.MYSQLDATABASE}`, function (error, results, fields) {
+      console.log(results)
+    })
+    mysqlResult = results
+  })
+  res.send('OK').status(200)
 })
 
 module.exports = router;

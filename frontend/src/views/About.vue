@@ -36,12 +36,14 @@
         <v-row
           justify="space-around"
         >
+          <!-- Nayan About Card -->
           <v-card
             class="mb-8"
             max-width="1200"
             elevation="7"
           >
             <div class="tw-flex">
+              <!-- Nayan image -->
               <div class="tw-w-1/3">
                 <v-img
                   src="../../public/img/portraits/nayan_test.png"
@@ -51,7 +53,7 @@
               </div>
               <div class="tw-p-8">
                 <v-card-title>Nayan Patel</v-card-title>
-                <v-card-subtitle>data migrations - cofounder</v-card-subtitle>
+                <v-card-subtitle>datagrate - cofounder</v-card-subtitle>
                 <v-card-text>
                   Hi, my name is Nayan Patel. I am an experienced data analyst with a demonstrated history
                   of working in the information technology and professional services industry.
@@ -61,6 +63,7 @@
               </div>
             </div>
           </v-card>
+          <!-- Sean About Card -->
           <v-card
             class="mb-8"
             max-width="1200"
@@ -69,13 +72,14 @@
             <div class="tw-flex">
               <div class="tw-p-8">
                 <v-card-title>Sean Batt</v-card-title>
-                <v-card-subtitle>data migrations - cofounder</v-card-subtitle>
+                <v-card-subtitle>datagrate - cofounder</v-card-subtitle>
                 <v-card-text>
                   Hello, my name is Sean Batt; I attended the University of Cincinnati where I studied Information Technology,
                   specializing in Networking and Systems. As a professional, my focus has been on Network Infrastructure and System Engineering and Support.
                   I am originally from Cincinnati, Ohio, and currently work in Technology Department for the Cincinnati Reds.
                 </v-card-text>
               </div>
+              <!-- Sean image -->
               <div class="tw-w-1/3">
                 <v-img
                   src="../../public/img/portraits/sean_test.png"

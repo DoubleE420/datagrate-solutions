@@ -59,8 +59,15 @@
               <v-card
                 class="ma-4"
               >
-                <v-card-title>
+                <v-card-title
+                  v-if="table.Tables_in_datagrate"
+                >
                   {{ table.Tables_in_datagrate }}
+                </v-card-title>
+                <v-card-title
+                  v-else
+                >
+                  {{ table }}
                 </v-card-title>
               </v-card>
             </div>

@@ -126,12 +126,12 @@ export default {
   components: {
   },
   data: () => ({
-    type: 'None'
+    type: 'MySQL'
   }),
   mounted () {
     // this.readSrcTables()
-    this.readDestTables()
-    this.readDestColumns()
+    this.readDestTables(this.type)
+    // this.readDestColumns(this.type)
   },
   methods: {
     updateDBName (name) {
@@ -167,6 +167,13 @@ export default {
       'destDBTables',
       'migrateTypes'
     ])
+  },
+  watch: {
+    type: function () {
+      console.log(this.type)
+      this.readDestTables(this.type)
+      // this.readDestColumns(this.type)
+    }
   }
 }
 </script>

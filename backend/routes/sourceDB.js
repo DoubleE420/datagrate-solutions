@@ -6,9 +6,9 @@ const { exec } = require('child_process')
 
 // build custom JSON object to have both tables and columns in the "migrate" page
 function plsWork (req, res, next) {
-  console.log('\nRequest in plsWork:')
-  console.log(req)
-  console.log('END OF REQUEST\n')
+  // console.log('\nRequest in plsWork:')
+  // console.log(req)
+  // console.log('END OF REQUEST\n')
   srcDB.query(`SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = N'` + req + `'`, function (error, results, fields) {
     if (error) throw error
     var obj = {
@@ -20,8 +20,8 @@ function plsWork (req, res, next) {
       colName = results[i].COLUMN_NAME
       obj.columns.push(colName)
     }
-    console.log('\nplsWork Object:')
-    console.log(obj)
+    // console.log('\nplsWork Object:')
+    // console.log(obj)
     return obj
   })
 }
@@ -41,7 +41,7 @@ router.post('/startmigration', function(req, res, next) {
       break
     // if the user clicks the "PostgreSQL" on the migrate page..... use pgloader and migrate it to postgresql
     case 'PostgreSQL':
-      exec(`pgloader mysql://${process.env.SRCDBUSER}:${process.env.SRCDBPASS}@${process.env.SRCDBHOST}/${process.env.SRCDBDATABASE} pgsql://${process.env.DESTDBUSER}:${process.env.DESTDBPASS}@${process.env.DESTDBHOST}/${process.env.DESTDBDATABASE}`, (error, stdout, stderr) => {
+      exec(`pgloader mysql://${process.env.SRCDBUSER}:${process.env.SRCDBPASS}@${process.env.SRCDBHOST}/${process.env.SRCDBDATABASE} pgsql://${process.env.POSTGRESUSER}:${process.env.POSTGRESPASS}@${process.env.POSTGRESHOST}/${process.env.POSTGRESDATABASE}`, (error, stdout, stderr) => {
         if (error) {
           console.log(error)
         }
@@ -55,10 +55,6 @@ router.post('/startmigration', function(req, res, next) {
     // if the user clicks the "MySQL" on the migration page..... dump the database to a .sql file then import it into the new database
     case 'MySQL':
       // dumps the database to a file
-      if ((process.env.DESTDBTYPE).toLowerCase() !== (data).toLowerCase()) {
-        res.send('error').status(404)
-        break
-      }
       exec(`mysqldump -h ${process.env.SRCDBHOST} -P ${process.env.SRCDBPORT} -u ${process.env.SRCDBUSER} -p${process.env.SRCDBPASS} ${process.env.SRCDBDATABASE} > /dbdump/${process.env.SRCDBHOST}-${process.env.SRCDBDATABASE}.sql`, (error, stdout, stderr) => {
         if (error) {
           console.log(error)
@@ -69,7 +65,7 @@ router.post('/startmigration', function(req, res, next) {
         console.log(stdout)
       })
       // imports the dumped file into the new database
-      exec(`mysql -h ${process.env.DESTDBHOST} -P ${process.env.DESTDBPORT} -u ${process.env.DESTDBUSER} -p${process.env.DESTDBPASS} ${process.env.DESTDBDATABASE} < /dbdump/${process.env.SRCDBHOST}-${process.env.SRCDBDATABASE}.sql`, (importerror, importstdout, importstderr) => {
+      exec(`mysql -h ${process.env.MYSQLHOST} -P ${process.env.MYSQLPORT} -u ${process.env.MYSQLUSER} -p${process.env.MYSQLPASS} ${process.env.MYSQLDATABASE} < /dbdump/${process.env.SRCDBHOST}-${process.env.SRCDBDATABASE}.sql`, (importerror, importstdout, importstderr) => {
         if (importerror) {
           console.log(importerror)
         }
@@ -88,19 +84,19 @@ router.post('/startmigration', function(req, res, next) {
 
 // reads the tables from the source database
 router.get('/init', function(req, res, next) {
-  console.log('\nINIT\n')
+  // console.log('\nINIT\n')
   var obj = []
   srcDB.query('SHOW TABLES', function (error, results, fields) {
     if (error) throw error
     else if (results) {
-      console.log('\n/init Results:')
+      // console.log('\n/init Results:')
       for (var i = 0; i < results.length; ++i) {
         var name = Object.values(results[i]).toString()
         obj.push(plsWork(name, res))
       }
-      console.log('\n/init Object:')
-      console.log(obj)
-      console.log('END OF INIT OBJECT\n')
+      // console.log('\n/init Object:')
+      // console.log(obj)
+      // console.log('END OF INIT OBJECT\n')
       res.send(obj)
     }
   })

@@ -66,7 +66,6 @@ export default new Vuex.Store({
         context.commit('GET_SOURCE_DB', tables)
         console.log('got data for init')
         // will show the current available databases
-        console.log(tables)
         context.commit('SET_LOADING_STATUS', false)
       })
     },
@@ -94,21 +93,31 @@ export default new Vuex.Store({
     },
     readSrcTables ({ commit, dispatch }) {
       commit('SET_LOADING_STATUS', true)
+      console.log('getting src tables')
       axios.get('/api/source/readtables').then(response => {
+        console.log('got src tables')
         commit('GET_TABLES', response.data)
         commit('SET_LOADING_STATUS', false)
       })
     },
-    readDestTables ({ commit, dispatch }) {
+    readDestTables ({ commit, dispatch }, type) {
       commit('SET_LOADING_STATUS', true)
-      axios.get(`/api/dest/readtables`).then(response => {
+      console.log('getting dest tables for type ' + type)
+      axios.post('/api/dest/readtables', {
+        dbType: type
+      }).then(response => {
+        console.log('got dest tables')
         commit('SET_DEST_TABLES', response.data)
         commit('SET_LOADING_STATUS', false)
       })
     },
-    readDestColumns ({ commit, dispatch }) {
+    readDestColumns ({ commit, dispatch }, type) {
       commit('SET_LOADING_STATUS', true)
-      axios.get('/api/dest/readcolumns').then(response => {
+      console.log('getting dest cols for type ' + type)
+      axios.post('/api/dest/readcolumns', {
+        dbType: type
+      }).then(response => {
+        console.log('got dest cols')
         commit('SET_DEST_COLUMNS', response.data)
         commit('SET_LOADING_STATUS', false)
       })

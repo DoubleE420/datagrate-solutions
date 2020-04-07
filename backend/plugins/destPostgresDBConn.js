@@ -2,11 +2,11 @@ const Pool = require('pg').Pool
 require('dotenv').config();
 
 const pool = new Pool({
-  host: process.env.DESTDBHOST,
-  user: process.env.DESTDBUSER,
-  password: process.env.DESTDBPASS,
-  port: process.env.DESTDBPORT,
-  database: process.env.DESTDBDATABASE
+  host: process.env.POSTGRESHOST,
+  user: process.env.POSTGRESUSER,
+  password: process.env.POSTGRESPASS,
+  port: process.env.POSTGRESPORT,
+  database: process.env.POSTGRESDATABASE
 })
  
 pool.connect(function(err) {
@@ -15,7 +15,7 @@ pool.connect(function(err) {
     return;
   }
 
-  console.log('connected to ' + process.env.DESTDBHOST + ' as user ' + process.env.DESTDBUSER)
+  console.log('connected to ' + process.env.POSTGRESHOST + ' as user ' + process.env.POSTGRESUSER)
 });
 
 module.exports = pool;

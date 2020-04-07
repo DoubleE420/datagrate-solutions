@@ -103,6 +103,7 @@ export default new Vuex.Store({
     readDestTables ({ commit, dispatch }, type) {
       commit('SET_LOADING_STATUS', true)
       console.log('getting dest tables for type ' + type)
+      console.log(type)
       axios.post('/api/dest/readtables', {
         dbType: type
       }).then(response => {
@@ -142,7 +143,7 @@ export default new Vuex.Store({
         table: tableName
       }).then(response => {
         console.log(response.data)
-        dispatch('readDestTables', type)
+        dispatch('readDestTables', type.dbType)
         commit('SET_ALERT_STATUS', {
           data: true,
           text: response.data

@@ -60,7 +60,7 @@
                 class="ma-4"
               >
                 <v-card-title>
-                  {{ table }}
+                  {{ table.Tables_in_datagrate }}
                 </v-card-title>
               </v-card>
             </div>

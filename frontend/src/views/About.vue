@@ -97,7 +97,7 @@
 
 <style scoped>
 .custom-y-margin {
-  margin-top: 15%;
-  margin-bottom: 15%;
+  margin-top: 5%;
+  margin-bottom: 5%;
 }
 </style>

@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var srcDB = require('../plugins/srcDBConn.js');
+const { PerformanceObserver, performance } = require('perf_hooks')
 
 const { exec } = require('child_process')
 
@@ -55,6 +56,7 @@ router.post('/startmigration', function(req, res, next) {
     // if the user clicks the "MySQL" on the migration page..... dump the database to a .sql file then import it into the new database
     case 'MySQL':
       // dumps the database to a file
+      var startTime = performance.now()
       exec(`mysqldump -h ${process.env.SRCDBHOST} -P ${process.env.SRCDBPORT} -u ${process.env.SRCDBUSER} -p${process.env.SRCDBPASS} ${process.env.SRCDBDATABASE} ${tableName} > /dbdump/${process.env.SRCDBHOST}-${process.env.SRCDBDATABASE}-${tableName}.sql`, (error, stdout, stderr) => {
         if (error) {
           console.log(error)
@@ -76,7 +78,10 @@ router.post('/startmigration', function(req, res, next) {
           }
           console.log('Import STDOUT: ')
           console.log(importstdout)
-          res.send(importstdout)
+          var endTime = performance.now()
+          var time = endTime - startTime
+          console.log(time)
+          res.send('Took: ' + parseInt(time)/1000 + ' seconds')
           console.log('imported file and sent stdout')
         })
       })

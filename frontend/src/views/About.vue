@@ -46,7 +46,7 @@
               <!-- Nayan image -->
               <div class="tw-w-1/3">
                 <v-img
-                  src="../../public/img/portraits/nayan_test.png"
+                  src="../../public/img/portraits/nayan_test.jpg"
                   width="300px"
                   class="tw-rounded"
                 ></v-img>
@@ -82,7 +82,7 @@
               <!-- Sean image -->
               <div class="tw-w-1/3">
                 <v-img
-                  src="../../public/img/portraits/sean_test.png"
+                  src="../../public/img/portraits/sean_test.jpg"
                   width="300px"
                   class="tw-rounded"
                 ></v-img>

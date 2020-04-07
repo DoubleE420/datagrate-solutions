@@ -33,8 +33,8 @@ router.get('/', function(req, res, next) {
 
 // /api/source/startmigration endpoint, starts themigration from mysql to postgresql
 router.post('/startmigration', function(req, res, next) {
-  data = req.body.dbType
-  console.log('Migrating to: ' + data)
+  data = req.body.dbType.dbType
+  tableName = req.body.dbType.currentTable
   switch (data) {
     case 'None':
       res.send('Invalid type')
@@ -55,29 +55,31 @@ router.post('/startmigration', function(req, res, next) {
     // if the user clicks the "MySQL" on the migration page..... dump the database to a .sql file then import it into the new database
     case 'MySQL':
       // dumps the database to a file
-      exec(`mysqldump -h ${process.env.SRCDBHOST} -P ${process.env.SRCDBPORT} -u ${process.env.SRCDBUSER} -p${process.env.SRCDBPASS} ${process.env.SRCDBDATABASE} > /dbdump/${process.env.SRCDBHOST}-${process.env.SRCDBDATABASE}.sql`, (error, stdout, stderr) => {
+      exec(`mysqldump -h ${process.env.SRCDBHOST} -P ${process.env.SRCDBPORT} -u ${process.env.SRCDBUSER} -p${process.env.SRCDBPASS} ${process.env.SRCDBDATABASE} ${tableName} > /dbdump/${process.env.SRCDBHOST}-${process.env.SRCDBDATABASE}-${tableName}.sql`, (error, stdout, stderr) => {
         if (error) {
           console.log(error)
         }
         if (stderr) {
           console.log(error)
         }
+        console.log('Export STDOUT: ')
         console.log(stdout)
+        console.log('exported file, importing.....')
+        // imports the dumped file into the new database
+        exec(`mysql -h ${process.env.MYSQLHOST} -P ${process.env.MYSQLPORT} -u ${process.env.MYSQLUSER} -p${process.env.MYSQLPASS} ${process.env.MYSQLDATABASE} < /dbdump/${process.env.SRCDBHOST}-${process.env.SRCDBDATABASE}-${tableName}.sql`, (importerror, importstdout, importstderr) => {
+          if (importerror) {
+            console.log(importerror)
+          }
+          if (importstderr) {
+            console.log(importstderr)
+          }
+          console.log('Import STDOUT: ')
+          console.log(importstdout)
+          res.send(importstdout)
+          console.log('imported file and sent stdout')
+        })
       })
-      // imports the dumped file into the new database
-      exec(`mysql -h ${process.env.MYSQLHOST} -P ${process.env.MYSQLPORT} -u ${process.env.MYSQLUSER} -p${process.env.MYSQLPASS} ${process.env.MYSQLDATABASE} < /dbdump/${process.env.SRCDBHOST}-${process.env.SRCDBDATABASE}.sql`, (importerror, importstdout, importstderr) => {
-        if (importerror) {
-          console.log(importerror)
-        }
-        if (importstderr) {
-          console.log(importstderr)
-        }
-        while (!importstdout) {
-          console.log('not yet')
-          // res.send(importstdout).status(200)
-        }
-
-      })
+      
       break
   }
 })

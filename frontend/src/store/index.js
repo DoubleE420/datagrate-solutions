@@ -133,14 +133,16 @@ export default new Vuex.Store({
           commit('SET_LOADING_STATUS', false)
         })
     },
-    startMigration ({ commit, dispatch }, type) {
+    startMigration ({ commit, dispatch }, type, tableName) {
       console.log('starting migration...')
+      console.log(type, tableName)
       commit('SET_LOADING_STATUS', true)
       axios.post('/api/source/startmigration', {
-        dbType: type
+        dbType: type,
+        table: tableName
       }).then(response => {
         console.log(response.data)
-        dispatch('readDestTables')
+        dispatch('readDestTables', type)
         commit('SET_ALERT_STATUS', {
           data: true,
           text: response.data

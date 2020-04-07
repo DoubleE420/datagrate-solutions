@@ -5,25 +5,25 @@
 -- --------------------------------------------------------
 
 --
--- Table structure for table `user_details`
+-- Table structure for table `1k_user_details`
 --
 
-CREATE TABLE IF NOT EXISTS `user_details` (
-  `user_id` int(11) NOT NULL AUTO_INCREMENT,
-  `username` varchar(255) DEFAULT NULL,
-  `first_name` varchar(50) DEFAULT NULL,
-  `last_name` varchar(50) DEFAULT NULL,
-  `gender` varchar(10) DEFAULT NULL,
-  `password` varchar(50) DEFAULT NULL,
-  `status` tinyint(10) DEFAULT NULL,
-  PRIMARY KEY (`user_id`)
+CREATE TABLE IF NOT EXISTS `1k_user_details` (
+  `1k_user_id` int(11) NOT NULL AUTO_INCREMENT,
+  `1k_username` varchar(255) DEFAULT NULL,
+  `1k_first_name` varchar(50) DEFAULT NULL,
+  `1k_last_name` varchar(50) DEFAULT NULL,
+  `1k_gender` varchar(10) DEFAULT NULL,
+  `1k_password` varchar(50) DEFAULT NULL,
+  `1k_status` tinyint(10) DEFAULT NULL,
+  PRIMARY KEY (`1k_user_id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=10001 ;
 
 --
--- Dumping data for table `user_details`
+-- Dumping data for table `1k_user_details`
 --
 
-INSERT INTO `user_details` (`user_id`, `username`, `first_name`, `last_name`, `gender`, `password`, `status`) VALUES
+INSERT INTO `1k_user_details` (`1k_user_id`, `1k_username`, `1k_first_name`, `1k_last_name`, `1k_gender`, `1k_password`, `1k_status`) VALUES
 (1, 'rogers63', 'david', 'john', 'Female', 'e6a33eee180b07e563d74fee8c2c66b8', 1),
 (2, 'mike28', 'rogers', 'paul', 'Male', '2e7dc6b8a1598f4f75c3eaa47958ee2f', 1),
 (3, 'rivera92', 'david', 'john', 'Male', '1c3a8e03f448d211904161a6f5849b68', 1),
@@ -620,7 +620,7 @@ INSERT INTO `user_details` (`user_id`, `username`, `first_name`, `last_name`, `g
 (594, 'john62', 'morgan', 'bell', 'Male', 'cee38bdf685ff9779ffd7dfa84830914', 1),
 (595, 'maria40', 'mike', 'mike', 'Female', '3c44940d53e0cf88126f4f2699275051', 1),
 (596, 'james50', 'mark', 'john', 'Male', '3b0b82eb79617a9f8805573b1baec238', 1);
-INSERT INTO `user_details` (`user_id`, `username`, `first_name`, `last_name`, `gender`, `password`, `status`) VALUES
+INSERT INTO `1k_user_details` (`1k_user_id`, `1k_username`, `1k_first_name`, `1k_last_name`, `1k_gender`, `1k_password`, `1k_status`) VALUES
 (597, 'ross63', 'morgan', 'mike', 'Female', '70d70c6d340b463fc4b3fde8d133de6d', 1),
 (598, 'wright56', 'ross', 'chrishaydon', 'Male', '279910d191730d428742ff2b010c30be', 1),
 (599, 'brown93', 'wright', 'brown', 'Female', 'cdd6bf95eefe26b43fed49f64e635536', 1),

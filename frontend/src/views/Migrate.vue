@@ -21,12 +21,12 @@
               Origin Database Tables
             </v-card-title>
           </v-card>
-          <div v-for="table in migrateColumns" :key="table.id">
+          <div v-for="table in srcDBTables" :key="table.id">
             <v-card
               class="mx-4 mt-4 pa-4"
             >
               <v-card-title>
-                {{ table.tableName }}
+                {{ getTableName(table) }}
               </v-card-title>
               <div v-for="col in table.motherObj" :key="col.id">
                 {{ col }}
@@ -45,7 +45,7 @@
           <h1
             class="text-center tw-text-2xl mb-4"
           >
-            Destination: {{ type }}
+            Destination: {{ dbType }}
           </h1>
           <v-card>
             <v-card-title
@@ -54,7 +54,7 @@
               Desination Database Tables
             </v-card-title>
           </v-card>
-          <div v-if="type !== 'None'">
+          <div v-if="dbType !== 'None'">
             <div v-for="table in destDBTables" :key="table.id">
               <v-card
                 class="ma-4"
@@ -72,7 +72,7 @@
         justify="space-around"
       >
         <v-card
-          class="text-center"
+          class="text-center px-4"
         >
           <v-card-title
             class="tw-text-xl"
@@ -90,7 +90,7 @@
                   outlined
                   v-on="on"
                 >
-                  <span>{{ type }}</span>
+                  <span>{{ dbType }}</span>
                   <v-icon right>mdi-menu-down</v-icon>
                 </v-btn>
               </template>
@@ -98,17 +98,45 @@
                 <v-list-item
                   v-for="(item, index) in migrateTypes"
                   :key="index"
-                  @click="type = item"
+                  @click="dbType = item"
                 >
                   <v-list-item-title>{{ item }}</v-list-item-title>
                 </v-list-item>
               </v-list>
             </v-menu>
           </v-row>
+          <div class="tw-flex tw-flex-wrap justify-center align-center"
+            v-show="dbType === 'MySQL'"
+          >
+            <v-card-title class="justify-center">Select the Table:</v-card-title>
+            <v-menu
+              offset-y
+            >
+              <template v-slot:activator="{ on }">
+                <v-btn
+                  outlined
+                  v-on="on"
+                >
+                  <span>{{ currentTable }}</span>
+                  <v-icon right>mdi-menu-down</v-icon>
+                </v-btn>
+              </template>
+              <v-list>
+                <v-list-item
+                  v-for="(item, index) in srcDBTables"
+                  :key="index"
+                  @click="selTable(item)"
+                >
+                  <v-list-item-title>{{ getTableName(item) }}</v-list-item-title>
+                </v-list-item>
+              </v-list>
+            </v-menu>
+          </div>
           <v-btn
             color="success"
             class="my-4"
-            @click="startMigration(type)"
+            @click="startMigration({dbType, currentTable})"
+            v-show="currentTable !== 'None' || dbType === 'PostgreSQL'"
           >
             Start Migration
           </v-btn>
@@ -126,12 +154,13 @@ export default {
   components: {
   },
   data: () => ({
-    type: 'MySQL'
+    dbType: 'MySQL',
+    currentTable: 'None'
   }),
   mounted () {
-    // this.readSrcTables()
-    this.readDestTables(this.type)
-    // this.readDestColumns(this.type)
+    this.readSrcTables()
+    this.readDestTables(this.dbType)
+    // this.readDestColumns(this.dbType)
   },
   methods: {
     updateDBName (name) {
@@ -152,6 +181,11 @@ export default {
     },
     getTableName (item) {
       return Object.values(item)[0]
+    },
+    selTable (table) {
+      var name = Object.values(table)[0]
+      this.currentTable = name
+      this.selectedTable = true
     }
   },
   computed: {
@@ -169,10 +203,10 @@ export default {
     ])
   },
   watch: {
-    type: function () {
-      console.log(this.type)
-      this.readDestTables(this.type)
-      // this.readDestColumns(this.type)
+    dbType: function () {
+      console.log(this.dbType)
+      this.readDestTables(this.dbType)
+      // this.readDestColumns(this.dbType)
     }
   }
 }

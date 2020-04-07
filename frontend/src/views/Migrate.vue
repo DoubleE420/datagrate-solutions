@@ -29,7 +29,7 @@
             </v-card>
             <div v-for="table in srcDBTables" :key="table.id">
               <v-card
-                class="mx-4 mt-4 pa-4"
+                class="ma-4"
               >
                 <v-card-title>
                   {{ getTableName(table) }}

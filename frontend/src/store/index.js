@@ -9,6 +9,7 @@ Vue.use(VueAxios, axios)
 export default new Vuex.Store({
   state: {
     alertStatus: false,
+    alertText: '',
     loadingStatus: false,
     migrateTypes: [
       'MySQL',
@@ -17,7 +18,7 @@ export default new Vuex.Store({
     currentDB: 'datagrate',
     currentTable: '',
     sourceDBs: '',
-    data: '',
+    data: [],
     migrateColumns: [],
     srcTableColumns: 'lol',
     srcDBTables: [],
@@ -28,8 +29,10 @@ export default new Vuex.Store({
     SET_LOADING_STATUS (state, status) {
       state.loadingStatus = status
     },
-    SET_ALERT_STATUS (state, data) {
+    SET_ALERT_STATUS (state, { data, text }) {
+      console.log('setting status to ' + data + 'with text ' + text)
       state.alertStatus = data
+      state.alertText = text
     },
     GET_SOURCE_DB (state, data) {
       state.sourceDBs = data
@@ -129,7 +132,10 @@ export default new Vuex.Store({
       }).then(response => {
         console.log(response.data)
         dispatch('readDestTables')
-        commit('SET_ALERT_STATUS', true)
+        commit('SET_ALERT_STATUS', {
+          data: true,
+          text: response.data
+        })
         commit('SET_LOADING_STATUS', false)
       })
     }

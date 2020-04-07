@@ -2,6 +2,9 @@
   <v-app>
     <Nav/>
     <v-content>
+      <!--
+        Loading animation
+      -->
       <v-overlay
         :value="loadingStatus"
       >
@@ -12,15 +15,58 @@
           indeterminate
         ></v-progress-circular>
       </v-overlay>
+      <!--
+        end loading animation
+      -->
       <router-view></router-view>
+      <!--
+        completion alert
+      -->
       <v-snackbar
         v-model="alert"
         color="success"
         class="text-center"
         top
+        :timeout=0
       >
         Migration Complete!
+        <v-btn
+          @click.stop="viewDetails = true"
+        >
+          View Details
+        </v-btn>
+        <v-overlay
+          :value="viewDetails"
+        >
+          <v-container>
+            <v-card
+              class="mx-auto"
+            >
+              <v-card-title>
+                Migration Details
+              </v-card-title>
+              <v-card-text
+              >
+                {{ alertText }}
+              </v-card-text>
+              <v-btn
+                color="error"
+                @click.stop="viewDetails = false"
+                class="mb-4"
+              >
+                Close
+              </v-btn>
+            </v-card>
+          </v-container>
+        </v-overlay>
+        <v-btn
+          icon
+          @click.stop="alert = false"
+        >X</v-btn>
       </v-snackbar>
+      <!--
+        end completion alert
+      -->
     </v-content>
     <footer
       class="mt-4 tw-bg-blue-700 pa-4 tw-border-t tw-border-1 tw-border-gray-100"
@@ -42,6 +88,9 @@
           </li>
           <li>
             <router-link tag="div" to="/about" class="mb-2 tw-cursor-pointer">About Us</router-link>
+          </li>
+          <li>
+            <router-link tag="div" to="/adminer" class="mb-2 tw-cursor-pointer">Adminer</router-link>
           </li>
         </ul>
         <ul class="text-center">
@@ -92,7 +141,8 @@ export default {
     Nav
   },
   data: () => ({
-    alert: false
+    alert: true,
+    viewDetails: false
   }),
   computed: {
     localComputedThingy () {
@@ -100,7 +150,8 @@ export default {
     },
     ...mapState([
       'loadingStatus',
-      'alertStatus'
+      'alertStatus',
+      'alertText'
     ])
   },
   methods: {
